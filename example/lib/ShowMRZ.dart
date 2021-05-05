@@ -11,19 +11,18 @@ class ShowMRZ extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return
-      ChangeNotifierProvider<NativeCallBack>(
+    return ChangeNotifierProvider<NativeCallBack>(
         create: (context) => NativeCallBack(),
-        child:
-        Center(
+        child: Center(
             child: Consumer<NativeCallBack>(builder: (context, mymodel, child) {
           return WillPopScope(
             child: Scaffold(
                 appBar: AppBar(
                   title: Text("Show MRZcode"),
                 ),
-                body:
-                    Text(codeMRZ)),
+                body: Center(
+                  child: Text(codeMRZ),
+                )),
             onWillPop: () async {
               Navigator.pop(context, true);
               return true;
