@@ -8,6 +8,8 @@ import 'package:flutter_plugin_scan_mrz/camera_kit_controller.dart';
 
 import 'NativeCallBack.dart';
 import 'package:provider/provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -20,6 +22,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final cameraKitController = CameraKitController();
+
+
   String _platformVersion = 'Unknown';
 
   @override
@@ -44,8 +48,14 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  Future<void> permission() async {
+    Permission.camera.request();
+  }
+
+
   @override
   Widget build(BuildContext context) {
+    permission();
     return ChangeNotifierProvider<NativeCallBack>(
         create: (context) => NativeCallBack(),
     child: MaterialApp(
@@ -55,7 +65,7 @@ class _MyAppState extends State<MyApp> {
             child:
             Consumer<NativeCallBack>(
               builder: (context, mymodel, child) {
-                mymodel.btnPermission();
+                // mymodel.btnPermission();
                 return CameraKitView(
                     hasFaceDetection: true,
                     cameraKitController: cameraKitController,

@@ -72,6 +72,7 @@ public class TextGraphic extends Graphic {
 
         // Draws the bounding box around the TextBlock.
         RectF rect = new RectF(element.getBoundingBox());
+//        Log.d("ok","===========" + rect.height());
         if(rect.bottom >  width/2)
         {
             canvas.drawRect(3/2*width - rect.top , rect.left , rect.bottom - 2*rect.bottom + width , rect.right, rectPaint);
@@ -79,13 +80,12 @@ public class TextGraphic extends Graphic {
         else {
             canvas.drawRect(width - rect.top , rect.left , rect.bottom + width - 2*rect.bottom , rect.right, rectPaint);
         }
+        textSize = (float) (rect.width()/(5.8*3));
+        textPaint.setTextSize(textSize);
 
-        canvas.rotate(90f,width - rect.top , rect.left);
+        canvas.rotate(90f,width - rect.top - rect.height() , rect.left);
         // Renders the text at the bottom of the box.
-        canvas.drawText(element.getText(),width- rect.top  , rect.left, textPaint);
-        canvas.rotate(-90f,width - rect.top, rect.left);
-
-
-
+        canvas.drawText(element.getText(),width- rect.top - rect.height() , rect.left, textPaint);
+        canvas.rotate(-90f,width - rect.top- rect.height(), rect.left);
     }
 }

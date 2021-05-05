@@ -139,6 +139,8 @@ class NativeCameraKitController {
     if (methodCall.method == "callBack" &&
         widget.showTextResult != null) {
       widget.showTextResult(methodCall.arguments);
+
+      return methodCall.arguments;
       // developer.log("////////${methodCall.arguments}", name: 'ok');
     }
     // if (methodCall.method == "getMRZ" &&

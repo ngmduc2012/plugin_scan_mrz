@@ -20,6 +20,12 @@ dependencies:
     # the parent directory to use the current plugin's version.
     path: ../
 
+  mrz_parser:
+    git:
+      url: git://github.com/daoan1412/mrz_parser.git
+      ref: master
+
+  permission_handler: ^7.1.0
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2

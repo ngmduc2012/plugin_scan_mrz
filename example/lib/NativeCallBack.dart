@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'ReadMRZcode.dart';
+import 'package:flutter_plugin_scan_mrz/flutter_plugin_scan_mrz.dart';
+import 'package:mrz_parser/mrz_parser.dart';
 import 'ShowMRZ.dart';
 import 'dart:developer' as developer;
 
@@ -10,48 +11,33 @@ class NativeCallBack with ChangeNotifier {
   String codeMRZ = 'No MRZ';
   bool stopCallBack = true;
 
-  Future<String> nativeMethodCallHandler(MethodCall methodCall) async {
-    if (methodCall.method == "callBack" && stopCallBack) {
-      codeMRZ = methodCall.arguments;
-      // developer.log("+++++++${methodCall.arguments}", name: 'ok');
-      notifyListeners();
-    }
-    return codeMRZ;
-  }
 
   void notifyText(String text, BuildContext buildContext) async {
-    codeMRZ = """
-    
-    documentNumber          : ${readMRZ().documentNumber(text)}
-    expiryDate              : ${readMRZ().expiryDate(text)}
-    birthDate               : ${readMRZ().birthDate(text)}
-    
-    documentType            : ${readMRZ().documentType(text)}
-    countryCode             : ${readMRZ().countryCode(text)}
-    documentNumberCheckDigit: ${readMRZ().documentNumberCheckDigit(text)}
-    optionalData            : ${readMRZ().optionalData(text)}
-    Birth Day               : ${readMRZ().showBirthDate(text)}
-    birthDateCheckDigit     : ${readMRZ().birthDateCheckDigit(text)}
-    sex                     : ${readMRZ().sex(text)}
-    Date of Expiry          : ${readMRZ().showExpiryDate(text)}
-    expiryDateCheckDigit    : ${readMRZ().expiryDateCheckDigit(text)}
-    nationality             : ${readMRZ().nationality(text)}
-    optionalData2           : ${readMRZ().optionalData2(text)}
-    finalCheckDigit         : ${readMRZ().finalCheckDigit(text)}
-    names                   : ${readMRZ().names(text)}
-    """;
-    stopCallBack = await Navigator.push(buildContext,
-        MaterialPageRoute(builder: (context) => ShowMRZ(codeMRZ: codeMRZ)));
+
+    // developer.log(text, name: "ok");
+    var mrz = [text.substring(0,30), text.substring(30,60), text.substring(60,90)];
+    // developer.log(text.substring(0,30), name: "ok");
+    // developer.log(text.substring(30,60), name: "ok");
+    // developer.log(text.substring(60,90), name: "ok");
+    var result = MRZParser.tryParse(mrz);
+    // developer.log(result?.mrzKey, name: "ok");
+    codeMRZ = result?.mrzKey;
+    if(codeMRZ.isNotEmpty){
+      stopCallBack = await Navigator.push(buildContext,
+          MaterialPageRoute(builder: (context) => ShowMRZ(codeMRZ: codeMRZ)));
+    }
+    else{
+      stopCallBack = true;
+    }
   }
 
   bool hasflashlight = false;
   bool isturnon = false;
   IconData flashicon = Icons.flash_off;
-  static const platform = const MethodChannel('FlashLight');
 
   Future<void> btnFlashlight() async {
     try {
-      isturnon = !await platform.invokeMethod('btnFlashLight');
+      isturnon = await FlutterPluginScanMrz.flashlight;
       // isturnon = !isturnon;
       if (isturnon) {
         flashicon = Icons.flash_on;
@@ -61,12 +47,5 @@ class NativeCallBack with ChangeNotifier {
       notifyListeners();
     } on PlatformException catch (e) {}
   }
-  static const platformPermission = const MethodChannel('permissionChannel');
 
-  Future<void> btnPermission() async {
-    try {
-      await platformPermission.invokeMethod('permission');
-      notifyListeners();
-    } on PlatformException catch (e) {}
-  }
 }

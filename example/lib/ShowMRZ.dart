@@ -23,13 +23,8 @@ class ShowMRZ extends StatelessWidget {
                   title: Text("Show MRZcode"),
                 ),
                 body:
-                    // Center(child:
-                    //     Consumer<NativeCallBack>(builder: (context, mymodel, child) {
-                    //   return
                     Text(codeMRZ)),
             onWillPop: () async {
-              // mymodel.startCallBack();
-              // developer.log("+++++++async:  ${mymodel.stopCallBack}", name: 'ok');
               Navigator.pop(context, true);
               return true;
             },

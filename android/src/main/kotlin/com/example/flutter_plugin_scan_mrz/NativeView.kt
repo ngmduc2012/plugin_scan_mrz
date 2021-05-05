@@ -86,7 +86,7 @@ class NativeView(private val context: Context, messenger: BinaryMessenger,
     }
 
     init {
-   
+
         lifecycleRegistry.currentState = Lifecycle.State.CREATED
         cameraPreview = cameraKitView.findViewById(R.id.viewFinder)
         mGraphicOverlay = cameraKitView.findViewById(R.id.graphic_overlay)
@@ -182,35 +182,6 @@ class NativeView(private val context: Context, messenger: BinaryMessenger,
         return lifecycleRegistry
     }
 
-    // Ham nay tra ve kq, lay ra text
-    private fun processTextRecognitionResult(texts: Text) {
-        textTest = texts
-        val blocks = texts.textBlocks
-        if (blocks.size == 0) {
-            mGraphicOverlay!!.clear()
-            return
-        }
-        mGraphicOverlay!!.clear()
-        for (block in texts.textBlocks) {
-            Log.d("ok", block.text)
-
-        }
-        for (i in blocks.indices) {
-            val lines = blocks[i].lines
-            for (j in lines.indices) {
-                val elements = lines[j].elements
-                for (k in elements.indices) {
-//                    Log.d("ok", "================"+elements[k].text)
-                    if(elements[k].text.length >= 29 && elements[k].text.contains("<<")){
-                        val textGraphic: GraphicOverlay.Graphic =
-                                TextGraphic(mGraphicOverlay, elements[k] ,getImageMaxWidth(),getImageMaxHeight())
-                        mGraphicOverlay?.add(textGraphic)
-                    }
-                }
-            }
-        }
-
-    }
 
 
     private fun getImageMaxWidth(): Int {
@@ -296,10 +267,10 @@ class NativeView(private val context: Context, messenger: BinaryMessenger,
         var line3: String = text.substring(60, 90)
         line1 = line1.substring(0, 5)+line1.substring(5).replace("O", "0")
         line2 = line2.substring(0, 29)+line2.substring(29).replace("O", "0")
-        line3 = line3.replace("K<", "<<")
-        line3 = line3.replace("S<", "<<")
-        line3 = line3.replace("s<", "<<")
-        line3 = line3.replace("k<", "<<")
+        line1 = line1.replace("K<", "<<")
+        line1 = line1.replace("S<", "<<")
+        line1 = line1.replace("s<", "<<")
+        line1 = line1.replace("k<", "<<")
         val pattern1 = "I[A-Z]{4}[0-9]{22}+<{2}[0-9]{1}".toRegex()
         val pattern2 = "[A-Z0-9]{2,30}+<{2,20}[0-9]{1}".toRegex()
         val pattern3 = "\\w+<<(\\w+<)+<{3,15}".toRegex()
@@ -313,7 +284,67 @@ class NativeView(private val context: Context, messenger: BinaryMessenger,
         if (pattern3.matches(line3)) {
             line3Result = line3
         }
+        line3Result = line3
         return line1Result + line2Result + line3Result
+    }
+
+    // Ham nay tra ve kq, lay ra text
+    private fun processTextRecognitionResult(texts: Text) {
+        textTest = texts
+        val blocks = texts.textBlocks
+
+        if (blocks.size == 0) {
+            mGraphicOverlay!!.clear()
+            return
+        }
+        mGraphicOverlay!!.clear()
+        for (block in texts.textBlocks) {
+            var textIndex = block.text
+            if (textIndex.length >= 90 && textIndex.startsWith("I")) {
+//                Log.d("ok", textIndex)
+                textIndex = textIndex.replace(" ", "").trim()
+                textIndex = textIndex.replace("\n", "")
+                textIndex = textIndex.replace("<S<", "<<<")
+                textIndex = textIndex.replace("<K<", "<<<")
+                textIndex = textIndex.replace("<k<", "<<<")
+                textIndex = textIndex.replace("<s<", "<<<")
+                if (textIndex.length == 90) {
+//                    Log.d("ok","=" + textIndex)
+                    textMRZResult = findTextMRZ(textIndex)
+                    if (textMRZResult.length == 90) {
+//                        Log.d("ok","=====" + textMRZResult)
+                        line1Result = ""
+                        line2Result = ""
+                        line3Result = ""
+
+                        io.reactivex.rxjava3.core.Observable.just(Unit)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .take(1)
+                                .subscribe {
+//                    Log.d("ok","callBack" )
+                                    methodChannel.invokeMethod("callBack", textMRZResult)
+                                }
+
+                    }
+                }
+            }
+
+        }
+        for (i in blocks.indices) {
+            val lines = blocks[i].lines
+            for (j in lines.indices) {
+                val elements = lines[j].elements
+                for (k in elements.indices) {
+//                    Log.d("ok", "================"+elements[k].text)
+                    if(elements[k].text.length >= 29 && elements[k].text.contains("<")){
+                        val textGraphic: GraphicOverlay.Graphic =
+                                TextGraphic(mGraphicOverlay, elements[k] ,getImageMaxWidth(),getImageMaxHeight())
+                        mGraphicOverlay?.add(textGraphic)
+                    }
+                }
+            }
+        }
+
     }
 
 
