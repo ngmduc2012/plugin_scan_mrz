@@ -5,38 +5,28 @@ import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.Matrix
 import android.os.Build
-import android.os.Parcel
-import android.os.Parcelable
-
 import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.camera.core.*
-
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
-
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import com.example.flutter_plugin_scan_mrz.*
-import com.example.flutter_plugin_scan_mrz.R
 import com.google.mlkit.vision.common.InputImage
-
 import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
-
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.platform.PlatformView
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-
-
-
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -110,6 +100,7 @@ class NativeView(private val context: Context, messenger: BinaryMessenger,
                     }
 
             imageCapture = ImageCapture.Builder()
+                    .setFlashMode(ImageCapture.FLASH_MODE_AUTO)
                     .build()
 
             val imageAnalyzer = ImageAnalysis.Builder()
@@ -118,7 +109,6 @@ class NativeView(private val context: Context, messenger: BinaryMessenger,
                     .also {
                         it.setAnalyzer(cameraExecutor, LuminosityAnalyzer(this))
                     }
-
 
             // Select back camera as a default
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
@@ -217,9 +207,9 @@ class NativeView(private val context: Context, messenger: BinaryMessenger,
         if(mSelectedImage?.width!!.toFloat()/mSelectedImage?.height!!.toFloat()<1){
             mSelectedImage = Bitmap.createBitmap(
                     mSelectedImage!!,
-                    ((mSelectedImage?.width!!.toFloat()-(getImageMaxWidth().toFloat()/getImageMaxHeight().toFloat()*mSelectedImage?.height!!.toFloat()))/2).toInt(),
+                    ((mSelectedImage?.width!!.toFloat() - (getImageMaxWidth().toFloat() / getImageMaxHeight().toFloat() * mSelectedImage?.height!!.toFloat())) / 2).toInt(),
                     0,
-                    ((getImageMaxWidth().toFloat()/getImageMaxHeight().toFloat()*mSelectedImage?.height!!.toFloat())).toInt(),
+                    ((getImageMaxWidth().toFloat() / getImageMaxHeight().toFloat() * mSelectedImage?.height!!.toFloat())).toInt(),
                     (mSelectedImage?.height!!.toFloat()).toInt()
             )
         }
@@ -227,9 +217,9 @@ class NativeView(private val context: Context, messenger: BinaryMessenger,
             mSelectedImage = Bitmap.createBitmap(
                     mSelectedImage!!,
                     0,
-                    ((mSelectedImage?.height!!.toFloat()-(mSelectedImage?.width!!.toFloat()*getImageMaxHeight().toFloat()/getImageMaxWidth().toFloat()))/2).toInt(),
+                    ((mSelectedImage?.height!!.toFloat() - (mSelectedImage?.width!!.toFloat() * getImageMaxHeight().toFloat() / getImageMaxWidth().toFloat())) / 2).toInt(),
                     (mSelectedImage?.width!!.toFloat()).toInt(),
-                    (mSelectedImage?.width!!.toFloat()*getImageMaxHeight().toFloat()/getImageMaxWidth().toFloat()).toInt()
+                    (mSelectedImage?.width!!.toFloat() * getImageMaxHeight().toFloat() / getImageMaxWidth().toFloat()).toInt()
             )
         }
 
@@ -245,6 +235,7 @@ class NativeView(private val context: Context, messenger: BinaryMessenger,
         matrix.postRotate(270f)
         mSelectedImage = Bitmap.createBitmap(resizedBitmap!!, 0, 0, resizedBitmap!!.width, resizedBitmap!!.height, matrix, true)
         val image = InputImage.fromBitmap(mSelectedImage!!, 0)
+
         val recognizer = TextRecognition.getClient()
         recognizer.process(image)
                 .addOnSuccessListener { texts ->
@@ -338,7 +329,7 @@ class NativeView(private val context: Context, messenger: BinaryMessenger,
 //                    Log.d("ok", "================"+elements[k].text)
                     if(elements[k].text.length >= 29 && elements[k].text.contains("<")){
                         val textGraphic: GraphicOverlay.Graphic =
-                                TextGraphic(mGraphicOverlay, elements[k] ,getImageMaxWidth(),getImageMaxHeight())
+                                TextGraphic(mGraphicOverlay, elements[k], getImageMaxWidth(), getImageMaxHeight())
                         mGraphicOverlay?.add(textGraphic)
                     }
                 }
