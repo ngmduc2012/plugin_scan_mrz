@@ -133,27 +133,46 @@ Positioned _buildCropBoxDetail() {
                         decoration: BoxDecoration(),
                         alignment: Alignment.center,
                         child: RotatedBox(
-                          quarterTurns: 1,
-                          child: Text(
-                            "I < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < <",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 27,
-                                fontFamily: "Times New Roman"),
-                          ),
-                          // LayoutBuilder(
-                          //   builder: (BuildContext context, BoxConstraints constraints) {
-                          //     if (constraints.maxWidth > 600) {
-                          //       for(var i = 0; i<= 10 ; i++){
+                            quarterTurns: 1,
+                            child: ListView(
+                              children: <Widget>[
+                                const Text(
+                                  "I < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < <",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 25,
+                                      fontFamily: "Times New Roman"),
+                                ),
+                                const Text(
+                                  "< < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < <",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 25,
+                                      fontFamily: "Times New Roman"),
+                                ),
+                                const Text(
+                                  "< < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < <",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 25,
+                                      fontFamily: "Times New Roman"),
+                                ),
+                              ],
+                            )
 
-                          //       }
-                          //       return _buildWideContainers();
-                          //     } else {
-                          //       return _buildNormalContainer();
-                          //     }
-                          //   },
-                          // ),
-                        )),
+                            // LayoutBuilder(
+                            //   builder: (BuildContext context, BoxConstraints constraints) {
+                            //     if (constraints.maxWidth > 600) {
+                            //       for(var i = 0; i<= 10 ; i++){
+
+                            //       }
+                            //       return _buildWideContainers();
+                            //     } else {
+                            //       return _buildNormalContainer();
+                            //     }
+                            //   },
+                            // ),
+                            )),
                   )),
             ),
           ),
