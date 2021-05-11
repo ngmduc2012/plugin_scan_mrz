@@ -137,21 +137,21 @@ Positioned _buildCropBoxDetail() {
                             child: ListView(
                               children: <Widget>[
                                 const Text(
-                                  "I < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < <",
+                                  "I < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < ",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 25,
                                       fontFamily: "Times New Roman"),
                                 ),
                                 const Text(
-                                  "< < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < <",
+                                  "< < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < ",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 25,
                                       fontFamily: "Times New Roman"),
                                 ),
                                 const Text(
-                                  "< < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < <",
+                                  "< < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < ",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 25,
@@ -231,29 +231,3 @@ Positioned _buildCropBoxDetail() {
   );
 }
 
-// Widget _buildNormalContainer() {
-//   return Center(
-//     child: Text(
-//       "I < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < ",
-//       style: TextStyle(
-//           color: Colors.white, fontSize: 27, fontFamily: "Times New Roman"),
-//     ),
-//   );
-// }
-
-// Widget _buildWideContainers() {
-//   for (var i = 0; i < 10; i++) {
-//     return Center(
-//       child: Column(
-//         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//         children: <Widget>[
-//           Icon(
-//             Icons.arrow_back_ios_outlined,
-//             color: Colors.white,
-//             size: 30,
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
